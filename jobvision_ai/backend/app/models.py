@@ -1,7 +1,6 @@
-from sqlalchemy import Column, Integer, String, Boolean
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
+from sqlalchemy import Column, Integer, String, Boolean, DateTime
+from sqlalchemy.sql import func
+from app.db import Base
 
 class User(Base):
     __tablename__ = "users"
@@ -11,4 +10,6 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)
     is_verified = Column(Boolean, default=False)
-    verification_token = Column(String, nullable=True)
+    verification_code = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    verified_at = Column(DateTime(timezone=True), nullable=True)
