@@ -1,0 +1,36 @@
+services:
+  backend:
+    build: ./backend
+    container_name: jobvision_backend
+    restart: always
+    env_file:
+      - ./backend/.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  web:
+    build: ./web
+    container_name: jobvision_web
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:15
+    container_name: jobvision_db
+    restart: always
+    environment:
+      POSTGRES_USER: jobvision
+      POSTGRES_PASSWORD: secret123
+      POSTGRES_DB: jobvision_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
